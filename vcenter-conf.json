@@ -1,9 +1,0 @@
-{ "vcenter": [
-
-    { 
-        "vcenterhost" : "vcenter.anthony.local",
-        "vcenteradmin" : "anthony-adm.anthony.local"
-    }]
-
-}
-
