@@ -1,4 +1,4 @@
-set firewall ipv4 name DMZ-to-LAN default-action 'accept'
+set firewall ipv4 name DMZ-to-LAN default-action 'drop'
 set firewall ipv4 name DMZ-to-LAN default-log
 set firewall ipv4 name DMZ-to-LAN rule 1 action 'accept'
 set firewall ipv4 name DMZ-to-LAN rule 1 description 'allow packets back from DMZ to LAN'
@@ -16,7 +16,7 @@ set firewall ipv4 name DMZ-to-WAN rule 1 state 'established'
 set firewall ipv4 name DMZ-to-WAN rule 999 action 'drop'
 set firewall ipv4 name DMZ-to-WAN rule 999 description 'temporary rule for software updates'
 set firewall ipv4 name DMZ-to-WAN rule 999 source address '172.16.50.4'
-set firewall ipv4 name LAN-to-DMZ default-action 'accept'
+set firewall ipv4 name LAN-to-DMZ default-action 'drop'
 set firewall ipv4 name LAN-to-DMZ default-log
 set firewall ipv4 name LAN-to-DMZ rule 1 action 'accept'
 set firewall ipv4 name LAN-to-DMZ rule 1 description 'Allow packets back from LAN to DMZ'
@@ -36,11 +36,11 @@ set firewall ipv4 name LAN-to-DMZ rule 30 description 'Allow 80/tcp from LAN to 
 set firewall ipv4 name LAN-to-DMZ rule 30 destination address '172.16.50.4'
 set firewall ipv4 name LAN-to-DMZ rule 30 destination port '80'
 set firewall ipv4 name LAN-to-DMZ rule 30 protocol 'tcp'
-set firewall ipv4 name LAN-to-WAN default-action 'accept'
+set firewall ipv4 name LAN-to-WAN default-action 'drop'
 set firewall ipv4 name LAN-to-WAN default-log
 set firewall ipv4 name LAN-to-WAN rule 1 action 'accept'
 set firewall ipv4 name LAN-to-WAN rule 1 description 'Allow LAN to WAN all connections'
-set firewall ipv4 name WAN-to-DMZ default-action 'accept'
+set firewall ipv4 name WAN-to-DMZ default-action 'drop'
 set firewall ipv4 name WAN-to-DMZ default-log
 set firewall ipv4 name WAN-to-DMZ description 'Allow SSH from WAN to JUMP'
 set firewall ipv4 name WAN-to-DMZ rule 1 action 'accept'
@@ -61,7 +61,7 @@ set firewall ipv4 name WAN-to-DMZ rule 21 description 'Allow SSH from WAN to NGI
 set firewall ipv4 name WAN-to-DMZ rule 21 destination address '172.16.50.3'
 set firewall ipv4 name WAN-to-DMZ rule 21 destination port '22'
 set firewall ipv4 name WAN-to-DMZ rule 21 protocol 'tcp'
-set firewall ipv4 name WAN-to-LAN default-action 'accept'
+set firewall ipv4 name WAN-to-LAN default-action 'drop'
 set firewall ipv4 name WAN-to-LAN default-log
 set firewall ipv4 name WAN-to-LAN rule 1 action 'accept'
 set firewall ipv4 name WAN-to-LAN rule 1 description 'Allow packets back from WAN to LAN'
