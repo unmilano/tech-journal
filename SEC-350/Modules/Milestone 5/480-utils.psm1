@@ -188,59 +188,6 @@ function New-480LinkedClone {
     return $linkedClone
 }
 
-function New-Network {
-    param(
-        [string]$VMHost,
-        [string]$SwitchName,
-        [string]$PortGroupName
-    )
-
-    if (-not $VMHost) { $VMHost = Read-Host "Enter ESXi host" }
-    if (-not $SwitchName) { $SwitchName = Read-Host "Enter switch name" }
-    if (-not $PortGroupName) { $PortGroupName = Read-Host "Enter port group name" }
-
-    $vmhost = Get-VMHost -Name $VMHost -ErrorAction SilentlyContinue
-    if (-not $vmhost) {
-        Write-Host "Host '$VMHost' not found" -ForegroundColor Red
-        return
-    }
-
-    $vswitch = New-VirtualSwitch -VMHost $vmhost -Name $SwitchName -ErrorAction SilentlyContinue
-    if (-not $vswitch) {
-        Write-Host "Failed to create virtual switch" -ForegroundColor Red
-        return
-    }
-
-    $pg = New-VirtualPortGroup -VirtualSwitch $vswitch -Name $PortGroupName -ErrorAction SilentlyContinue
-    if (-not $pg) {
-        Write-Host "Failed to create port group" -ForegroundColor Red
-        return
-    }
-
-    Write-Host "Switch '$SwitchName' and Port Group '$PortGroupName' created" -ForegroundColor Green
-}
-
-function Get-IP {
-    param(
-        [string]$VMName
-    )
-
-    if (-not $VMName) { $VMName = Read-Host "Enter VM name" }
-
-    $vm = Get-VM -Name $VMName -ErrorAction SilentlyContinue
-    if (-not $vm) {
-        Write-Host "VM '$VMName' not found" -ForegroundColor Red
-        return
-    }
-
-    $mac = (Get-NetworkAdapter -VM $vm)[0].MacAddress
-    $ip = $vm.guest.ipaddress[0]
-
-    Write-Host "VM: $VMName"
-    Write-Host "IP:  $ip"
-    Write-Host "MAC: $mac"
-}
-
 function Start-480VM {
     param([string]$VMName)
 
@@ -279,44 +226,4 @@ function Stop-480VM {
 
     Stop-VM -VM $vm -Confirm:$false
     Write-Host "'$VMName' stopped" -ForegroundColor Green
-}
-
-function Set-Network {
-    param(
-        [string]$VMName,
-        [string]$NetworkName
-    )
-
-    if (-not $VMName) { $VMName = Read-Host "Enter VM name" }
-    if (-not $NetworkName) { $NetworkName = Read-Host "Enter network/port group name" }
-
-    $vm = Get-VM -Name $VMName -ErrorAction SilentlyContinue
-    if (-not $vm) {
-        Write-Host "VM '$VMName' not found" -ForegroundColor Red
-        return
-    }
-
-    $network = Get-VirtualNetwork -Name $NetworkName -ErrorAction SilentlyContinue
-    if (-not $network) {
-        Write-Host "Network '$NetworkName' not found" -ForegroundColor Red
-        return
-    }
-
-    $adapters = Get-NetworkAdapter -VM $vm
-    $i = 0
-    foreach ($adapter in $adapters) {
-        Write-Host "[$i] $($adapter.Name) - currently on $($adapter.NetworkName)"
-        $i++
-    }
-
-    $choice = Read-Host "Which adapter do you want to change"
-    $selected = $adapters[$choice]
-
-    if (-not $selected) {
-        Write-Host "Invalid selection" -ForegroundColor Red
-        return
-    }
-
-    Set-NetworkAdapter -NetworkAdapter $selected -NetworkName $NetworkName -Confirm:$false
-    Write-Host "Adapter set to '$NetworkName'" -ForegroundColor Green
 }
