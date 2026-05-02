@@ -1,3 +1,4 @@
 {
   "vcenter_server" : "vcenter.anthony.local"
+  "vm_folder" : "BASEVM"
 }
